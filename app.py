@@ -16,7 +16,7 @@ def home():
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json["message"].lower()
-
+    df=load_links()
     for _, row in df.iterrows():
         keywords = str(row["keywords"]).lower().split(",")
         for keyword in keywords:
@@ -26,4 +26,5 @@ def chat():
     return jsonify({"reply": "لم أجد رابط مناسبا لرسالتك. حاول استخدام كلمات أخرى."})
 
 if __name__ == "__main__":
+
     app.run(debug=True)
