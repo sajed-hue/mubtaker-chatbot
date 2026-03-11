@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mubtaker</title>
+
+<style>
+
+:root{
+--primary:#1e88e5;
+--primary-dark:#1565c0;
+--bg-url:url("https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop");
+}
+
+body{
+margin:0;
+font-family:Arial;
+background:
+linear-gradient(rgba(10,25,50,0.7),rgba(10,25,50,0.7)),
+var(--bg-url) center/cover no-repeat fixed;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+#chat{
+width:720px;
+max-width:95%;
+background:white;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.header{
+background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+color:white;
+padding:16px;
+font-size:20px;
+text-align:center;
+}
+
+#messages{
+padding:20px;
+flex:1;
+overflow-y:auto;
+background:#f5f7fb;
+}
+
+.row{
+display:flex;
+align-items:flex-end;
+margin-bottom:12px;
+}
+
+.row.user{
+flex-direction:row-reverse;
+}
+
+.avatar{
+width:38px;
+height:38px;
+border-radius:50%;
+margin:0 8px;
+}
+
+.message{
+max-width:70%;
+padding:10px 14px;
+border-radius:14px;
+font-size:14px;
+}
+
+.bot .message{
+background:white;
+border:1px solid #ddd;
+}
+
+.user .message{
+background:#e3f2fd;
+}
+
+.input-area{
+display:flex;
+border-top:1px solid #eee;
+}
+
+#input{
+flex:1;
+padding:14px;
+border:none;
+outline:none;
+}
+
+button{
+background:var(--primary);
+color:white;
+border:none;
+padding:0 20px;
+cursor:pointer;
+}
+
+button:hover{
+background:var(--primary-dark);
+}
+
+/* Card الرابط */
+
+.link-card{
+background:white;
+border-radius:12px;
+padding:12px;
+border:1px solid #e0e0e0;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.link-card-title{
+font-size:14px;
+font-weight:bold;
+color:#333;
+}
+
+.link-card a{
+background:#1e88e5;
+color:white;
+text-decoration:none;
+padding:6px 12px;
+border-radius:8px;
+font-size:13px;
+width:fit-content;
+}
+
+.link-card a:hover{
+background:#1565c0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="chat">
+
+<div class="header">
+Mubtaker Chatbot
+</div>
+
+<div id="messages"></div>
+
+<div class="input-area">
+<input id="input" placeholder="اكتب سؤالك...">
+<button onclick="send()">إرسال</button>
+</div>
+
+</div>
+
+<script>
+
+const userAvatar="https://cdn-icons-png.flaticon.com/128/924/924915.png"
+const botAvatar="https://cdn-icons-png.flaticon.com/128/1068/1068549.png"
+
+async function send(){
+
+let input=document.getElementById("input")
+let message=input.value.trim()
+
+if(!message)return
+
+let messages=document.getElementById("messages")
+
+messages.innerHTML+=`
+<div class="row user">
+<img class="avatar" src="${userAvatar}">
+<div class="message">${message}</div>
+</div>
+`
+
+let res=await fetch("/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:message})
+})
+
+let data=await res.json()
+
+let reply=data.reply
+
+let content
+
+if(reply.startsWith("http")){
+
+content=`
+<div class="link-card">
+<div class="link-card-title">📚 اضغط لفتح المصدر</div>
+<a href="${reply}" target="_blank">Open Link</a>
+</div>
+`
+
+}else{
+content=reply
+}
+
+messages.innerHTML+=`
+<div class="row bot">
+<img class="avatar" src="${botAvatar}">
+<div class="message">${content}</div>
+</div>
+`
+
+messages.scrollTop=messages.scrollHeight
+
+input.value=""
+
+}
+
+</script>
+
+</body>
+</html>
