@@ -8,23 +8,38 @@ def load_links():
     url = f"https://docs.google.com/spreadsheets/d/{Sheet_ID}/export?format=csv"
     df = pd.read_csv(url)
     return df
-df=load_links()
 @app.route('/')
 def home():
     return render_template("index.html")
-
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json["message"].lower()
-    df=load_links()
+
+    df = load_links()
+
+    best_match = ""
+    best_link = ""
+
     for _, row in df.iterrows():
+
+        if pd.isna(row["keywords"]) or pd.isna(row["link"]):
+            continue
+
         keywords = str(row["keywords"]).lower().split(",")
+
         for keyword in keywords:
-            if keyword.strip() in user_message:
-                return jsonify({"reply": row["link"]})
+            keyword = keyword.strip()
+
+            if keyword in user_message and len(keyword) > len(best_match):
+                best_match = keyword
+                best_link = row["link"]
+
+    if best_link:
+        return jsonify({"reply": best_link})
 
     return jsonify({"reply": "لم أجد رابط مناسبا لرسالتك. حاول استخدام كلمات أخرى."})
 
 if __name__ == "__main__":
 
     app.run(debug=True)
+
