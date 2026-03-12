@@ -1,227 +1,272 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Mubtaker</title>
 
-<style>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
+<style>
 :root{
---primary:#1e88e5;
---primary-dark:#1565c0;
---bg-url:url("https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop");
+  --primary:#1e88e5;
+  --primary-dark:#1565c0;
+  --bg-url:url("https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop");
+  --bg-light:#f5f7fb;
+  --text-light:#333;
+  --footer-light:#fafafa;
 }
 
 body{
-margin:0;
-font-family:Arial;
-background:
-linear-gradient(rgba(10,25,50,0.7),rgba(10,25,50,0.7)),
-var(--bg-url) center/cover no-repeat fixed;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
+  margin:0;
+  font-family:'Tajawal', Arial, sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background: linear-gradient(rgba(10,25,50,0.7),rgba(10,25,50,0.7)), var(--bg-url) center/cover no-repeat fixed;
+  transition: background 0.3s, color 0.3s;
 }
 
 #chat{
-width:720px;
-max-width:95%;
-background:white;
-border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
-display:flex;
-flex-direction:column;
-overflow:hidden;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  width:720px;
+  max-width:95%;
+  background:white;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  overflow:hidden;
+  margin:auto;
+  transition: background 0.3s, color 0.3s;
 }
 
 .header{
-background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-color:white;
-padding:16px;
-font-size:20px;
-text-align:center;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:white;
+  padding:16px;
+  font-size:20px;
+  font-weight:bold;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 #messages{
-padding:20px;
-flex:1;
-overflow-y:auto;
-background:#f5f7fb;
+  flex:1;
+  padding:20px;
+  overflow-y:auto;
+  background: var(--bg-light);
+  transition: background 0.3s;
 }
 
 .row{
-display:flex;
-align-items:flex-end;
-margin-bottom:12px;
+  display:flex;
+  align-items:flex-end;
+  margin-bottom:12px;
+  opacity:0;
+  transform:translateY(20px);
+  animation: fadeUp 0.4s forwards;
+}
+@keyframes fadeUp{
+  to{ opacity:1; transform:translateY(0);}
 }
 
-.row.user{
-flex-direction:row-reverse;
-}
-
-.avatar{
-width:38px;
-height:38px;
-border-radius:50%;
-margin:0 8px;
-}
-
+.row.user{ flex-direction:row-reverse; }
+.avatar{ width:38px; height:38px; border-radius:50%; margin:0 8px; }
 .message{
-max-width:70%;
-padding:10px 14px;
-border-radius:14px;
-font-size:14px;
+  max-width:70%;
+  padding:10px 14px;
+  border-radius:14px;
+  font-size:14px;
+  word-wrap: break-word;
+  transition: background 0.3s, color 0.3s;
 }
+.bot .message{ background:white; border:1px solid #ddd; }
+.user .message{ background:#e3f2fd; }
 
-.bot .message{
-background:white;
-border:1px solid #ddd;
-}
-
-.user .message{
-background:#e3f2fd;
-}
-
-.input-area{
-display:flex;
-border-top:1px solid #eee;
-}
-
-#input{
-flex:1;
-padding:14px;
-border:none;
-outline:none;
-}
-
-button{
-background:var(--primary);
-color:white;
-border:none;
-padding:0 20px;
-cursor:pointer;
-}
-
-button:hover{
-background:var(--primary-dark);
-}
-
-/* Card الرابط */
+.input-area{ display:flex; border-top:1px solid #eee; }
+#input{ flex:1; padding:14px; border:none; outline:none; font-size:14px; background:#fff; transition: background 0.3s, color 0.3s; }
+button{ background:var(--primary); color:white; border:none; padding:0 20px; cursor:pointer; font-weight:bold; transition:0.3s; }
+button:hover{ background:var(--primary-dark); }
 
 .link-card{
-background:white;
-border-radius:12px;
-padding:12px;
-border:1px solid #e0e0e0;
-box-shadow:0 3px 10px rgba(0,0,0,0.08);
-display:flex;
-flex-direction:column;
-gap:6px;
+  background:white;
+  border-radius:12px;
+  padding:12px;
+  border:1px solid #e0e0e0;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  transition: background 0.3s, color 0.3s;
 }
-
-.link-card-title{
-font-size:14px;
-font-weight:bold;
-color:#333;
-}
-
+.link-card-title{ font-size:14px; font-weight:bold; color:#333; }
 .link-card a{
-background:#1e88e5;
-color:white;
-text-decoration:none;
-padding:6px 12px;
-border-radius:8px;
-font-size:13px;
-width:fit-content;
+  background:#1e88e5;
+  color:white;
+  text-decoration:none;
+  padding:6px 12px;
+  border-radius:8px;
+  font-size:13px;
+  width:fit-content;
+  transition:0.3s;
+}
+.link-card a:hover{ background:#1565c0; }
+
+.footer{
+  display:flex;
+  justify-content:space-between;   
+  align-items:center;
+  padding:15px 20px;
+  font-size:13px;
+  color:#aaa;
+  background: var(--footer-light);
+  border-top:1px solid #eee;
+  flex-shrink:0;
+  transition: background 0.3s, color 0.3s;
+}
+.footer p{
+  margin:0;
+}
+.social{ display:flex;
+  gap:12px;
+  margin:0; }
+.icon{ width:28px; margin:0 8px; cursor:pointer; transition:0.3s; }
+.icon:hover{ transform:scale(1.2); }
+
+.loader{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  background:#1e88e5;
+  border-radius:50%;
+  margin:0 2px;
+  animation: blink 1.2s infinite ease-in-out both;
+}
+.loader:nth-child(2){animation-delay:0.2s;}
+.loader:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{
+  0%, 80%, 100% { transform: scale(0); opacity:0.3; }
+  40% { transform: scale(1); opacity:1; }
 }
 
-.link-card a:hover{
-background:#1565c0;
+@media(max-width:480px){
+  #chat{ width:90%; }
+  #input, button{ font-size:16px; padding:12px; }
 }
 
+body.dark-mode{
+  background:#121212;
+  color:white;
+}
+body.dark-mode #chat{ background:#1e1e1e; }
+body.dark-mode #messages{ background:#222; }
+body.dark-mode .bot .message{ background:#2a2a2a; border:1px solid #444; color:#eee; }
+body.dark-mode .user .message{ background:#1565c0; color:white; }
+body.dark-mode #input{ background:#2a2a2a; color:white; }
+body.dark-mode .link-card{ background:#2a2a2a; color:#eee; border:1px solid #444; }
+body.dark-mode .link-card a{ background:#1565c0; }
+body.dark-mode .footer{ background:#1b1b1b; color:#ccc; }
+
+.dark-toggle{
+  background:#fff; color:#1565c0; border:none; padding:4px 8px; border-radius:8px; cursor:pointer; font-size:12px; transition:0.3s;
+}
+.dark-toggle:hover{ background:#eee; }
 </style>
 </head>
 
 <body>
 
 <div id="chat">
+  <div class="header">
+    Mubtaker Chatbot
+    <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+  </div>
 
-<div class="header">
-Mubtaker Chatbot
+  <div id="messages"></div>
+
+  <div class="input-area">
+    <input id="input" placeholder="اكتب اسم المادة كما في البورتال... أنا هنا للمساعدة" onkeypress="handleKey(event)">
+    <button onclick="send()">إرسال</button>
+  </div>
 </div>
 
-<div id="messages"></div>
-
-<div class="input-area">
-<input id="input" placeholder="اكتب سؤالك...">
-<button onclick="send()">إرسال</button>
-</div>
-
-</div>
+<footer class="footer">
+  <p>© 2026 Mubtaker | Developed by Sajed kittanh</p>
+  <div class="social">
+    <a href="https://github.com/sajed-hue" target="_blank" rel="noopener" title="GitHub">
+      <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" class="icon" alt="GitHub">
+    </a>
+    <a href="https://www.linkedin.com/in/sajed-kittanh" target="_blank" rel="noopener" title="LinkedIn">
+      <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" class="icon" alt="LinkedIn">
+    </a>
+   
+  </div>
+</footer>
 
 <script>
+const userAvatar="https://cdn-icons-png.flaticon.com/128/924/924915.png";
+const botAvatar="https://cdn-icons-png.flaticon.com/128/1068/1068549.png";
 
-const userAvatar="https://cdn-icons-png.flaticon.com/128/924/924915.png"
-const botAvatar="https://cdn-icons-png.flaticon.com/128/1068/1068549.png"
+function handleKey(e){ if(e.key==='Enter') send(); }
 
 async function send(){
+  let input=document.getElementById("input")
+  let message=input.value.trim()
+  if(!message) return
 
-let input=document.getElementById("input")
-let message=input.value.trim()
+  let messages=document.getElementById("messages")
 
-if(!message)return
+  messages.innerHTML+=`
+    <div class="row user">
+      <img class="avatar" src="${userAvatar}">
+      <div class="message">${message}</div>
+    </div>
+  `;
+  messages.scrollTop=messages.scrollHeight;
+  input.value="";
 
-let messages=document.getElementById("messages")
+  let loaderDiv=document.createElement("div");
+  loaderDiv.className="row bot";
+  loaderDiv.innerHTML=`
+    <img class="avatar" src="${botAvatar}">
+    <div class="message">
+      <span class="loader"></span>
+      <span class="loader"></span>
+      <span class="loader"></span>
+    </div>
+  `;
+  messages.appendChild(loaderDiv);
+  messages.scrollTop=messages.scrollHeight;
 
-messages.innerHTML+=`
-<div class="row user">
-<img class="avatar" src="${userAvatar}">
-<div class="message">${message}</div>
-</div>
-`
+  let res=await fetch("/chat",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:message})
+  });
 
-let res=await fetch("/chat",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({message:message})
-})
+  let data=await res.json();
+  let reply=data.reply;
+  loaderDiv.remove();
 
-let data=await res.json()
+  let content = reply.startsWith("http") ?
+    `<div class="link-card">
+       <div class="link-card-title">📚 اضغط لفتح المصدر</div>
+       <a href="${reply}" target="_blank">Open Link</a>
+     </div>` : reply;
 
-let reply=data.reply
-
-let content
-
-if(reply.startsWith("http")){
-
-content=`
-<div class="link-card">
-<div class="link-card-title">📚 اضغط لفتح المصدر</div>
-<a href="${reply}" target="_blank">Open Link</a>
-</div>
-`
-
-}else{
-content=reply
+  messages.innerHTML+=`
+    <div class="row bot">
+      <img class="avatar" src="${botAvatar}">
+      <div class="message">${content}</div>
+    </div>
+  `;
+  messages.scrollTop=messages.scrollHeight;
 }
 
-messages.innerHTML+=`
-<div class="row bot">
-<img class="avatar" src="${botAvatar}">
-<div class="message">${content}</div>
-</div>
-`
 
-messages.scrollTop=messages.scrollHeight
-
-input.value=""
-
-}
-
+function toggleDarkMode(){ document.body.classList.toggle("dark-mode"); }
 </script>
 
 </body>
