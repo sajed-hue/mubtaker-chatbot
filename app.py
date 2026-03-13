@@ -40,6 +40,6 @@ def chat():
     return jsonify({"reply": "لم أجد رابط مناسبا لرسالتك. حاول استخدام كلمات أخرى."})
 
 if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
 
-    app.run(debug=True)
 
