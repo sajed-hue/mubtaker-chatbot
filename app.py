@@ -5,9 +5,12 @@ app = Flask(__name__)
 Sheet_ID = "1eX0HjdZKYD9TvvavRWzL1uQ0sCFv_u_X-38vNholUeA"
 
 def load_links():
-    url = f"https://docs.google.com/spreadsheets/d/{Sheet_ID}/export?format=csv"
-    df = pd.read_csv(url)
-    return df
+    try:
+        url = f"https://docs.google.com/spreadsheets/d/{Sheet_ID}/export?format=csv"
+        df = pd.read_csv(url)
+        return df
+    except:
+        return pd.DataFrame()
 @app.route('/')
 def home():
     return render_template("index.html")
@@ -41,5 +44,6 @@ def chat():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
 
 
